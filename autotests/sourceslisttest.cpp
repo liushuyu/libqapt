@@ -120,7 +120,7 @@ void SourcesListTest::initTestCase()
     pkgInitConfig(*_config);
     
     // Called before the first testfunction is executed
-    QString cwd = QCoreApplication::applicationDirPath();
+    QString cwd = QDir::currentPath();
     sampleSourcesHasOneFile = QStringList(QString(cwd+"/data/test1.list"));
     sampleSourcesHasTwoFiles = QStringList(
         {

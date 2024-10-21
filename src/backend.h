@@ -57,7 +57,7 @@ class BackendPrivate;
  *
  * @author Jonathan Thomas
  */
-class Q_DECL_EXPORT Backend : public QObject
+class QAPT_EXPORT Backend : public QObject
 {
     Q_OBJECT
 public:

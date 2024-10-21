@@ -25,11 +25,13 @@
 #include <QSharedDataPointer>
 #include <QStringList>
 
+#include "qapt_export.h"
+
 namespace QApt {
 
 class SourceEntryPrivate;
 
-class Q_DECL_EXPORT SourceEntry
+class QAPT_EXPORT SourceEntry
 {
 public:
     explicit SourceEntry();

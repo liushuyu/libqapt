@@ -31,7 +31,7 @@ namespace QApt {
 
 class SourcesListPrivate;
 
-class Q_DECL_EXPORT SourcesList : public QObject
+class QAPT_EXPORT SourcesList : public QObject
 {
     Q_OBJECT
 public:

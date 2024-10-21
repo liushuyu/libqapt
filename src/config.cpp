@@ -221,7 +221,7 @@ void Config::writeEntry(const QString &key, const QString &value)
     valueString = '\"' + value.toLatin1() + "\";";
 
     if (d->newFile) {
-        d->buffer.append(key + ' ' + valueString);
+        d->buffer.append(key.toUtf8() + ' ' + valueString);
         d->newFile = false;
     } else {
         d->writeBufferEntry(key.toLatin1(), valueString);

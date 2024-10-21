@@ -21,7 +21,8 @@
 #include "changelog.h"
 
 // Qt includes
-#include <QRegExp>
+#include <QRegularExpression>
+#include <QTimeZone>
 #include <QSharedData>
 #include <QStringBuilder>
 #include <QStringList>
@@ -69,13 +70,13 @@ public:
 void ChangelogEntryPrivate::parseData(const QString &sourcePackage)
 {
     QStringList lines = data.split('\n');
-    QRegExp rxInfo(QString("^%1 \\((.*)\\)(.*)$").arg(QRegExp::escape(sourcePackage)));
+    QRegularExpression rxInfo(QString("^%1 \\((.*)\\)(.*)$").arg(QRegularExpression::escape(sourcePackage)));
 
     QString versionLine = lines.first();
     lines.removeFirst();
-    rxInfo.indexIn(versionLine);
+    const QRegularExpressionMatch rxInfoMatch = rxInfo.match(versionLine);
 
-    QStringList list = rxInfo.capturedTexts();
+    QStringList list = rxInfoMatch.capturedTexts();
     if (list.count() > 1) {
         version = list.at(1);
     }
@@ -86,9 +87,9 @@ void ChangelogEntryPrivate::parseData(const QString &sourcePackage)
             description.append(line % '\n');
 
             // Grab CVEs
-            QRegExp rxCVE("CVE-\\d{4}-\\d{4}");
-            rxCVE.indexIn(line);
-            QStringList cveMatches = rxCVE.capturedTexts();
+            QRegularExpression rxCVE("CVE-\\d{4}-\\d{4}");
+            const QRegularExpressionMatch rxCVEMatch = rxCVE.match(line);
+            QStringList cveMatches = rxCVEMatch.capturedTexts();
 
             for (const QString &match : cveMatches)
             {
@@ -99,14 +100,14 @@ void ChangelogEntryPrivate::parseData(const QString &sourcePackage)
             continue;
         }
 
-        QRegExp rxDate("^ -- (.+) (<.+>)  (.+)$");
-        rxDate.indexIn(line);
-        list = rxDate.capturedTexts();
+        QRegularExpression rxDate("^ -- (.+) (<.+>)  (.+)$");
+        const QRegularExpressionMatch rxDateMatch = rxDate.match(line);
+        list = rxDateMatch.capturedTexts();
 
         if (list.count() > 1) {
             time_t issueTime = -1;
             if (RFC1123StrToTime(list.at(3).toUtf8().data(), issueTime)) {
-                issueDate = QDateTime::fromTime_t(issueTime);
+                issueDate = QDateTime::fromSecsSinceEpoch(issueTime, QTimeZone::utc());
                 break;
             }
         }

@@ -45,7 +45,7 @@ class DependencyInfoPrivate;
  *
  * @author Jonathan Thomas
  */
-class Q_DECL_EXPORT DependencyInfo
+class QAPT_EXPORT DependencyInfo
 {
 public:
    /**

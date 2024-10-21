@@ -25,6 +25,8 @@
 #include <QList>
 #include <QVariantMap>
 
+#include "qapt_export.h"
+
 namespace QApt
 {
     class Package;

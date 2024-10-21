@@ -24,6 +24,8 @@
 #include <QObject>
 #include <QString>
 
+#include "qapt_export.h"
+
 /**
  * The QApt namespace is the main namespace for LibQApt. All classes in this
  * library fall under this namespace.
@@ -47,7 +49,7 @@ class ConfigPrivate;
  * @author Jonathan Thomas
  * @since 1.1
  */
-class Q_DECL_EXPORT Config : public QObject
+class QAPT_EXPORT Config : public QObject
 {
     Q_OBJECT
 public:

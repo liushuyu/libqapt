@@ -49,7 +49,7 @@ class PackagePrivate;
  *
  * @author Jonathan Thomas
  */
-class Q_DECL_EXPORT Package
+class QAPT_EXPORT Package
 {
 
 public:

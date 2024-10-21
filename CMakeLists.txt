@@ -1,5 +1,5 @@
 project(qapt)
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.16)
 
 set(PROJECT_VERSION_MAJOR 3)
 set(PROJECT_VERSION_MINOR 0)
@@ -7,7 +7,11 @@ set(PROJECT_VERSION_PATCH 5)
 set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}" )
 set(PROJECT_SOVERSION ${PROJECT_VERSION_MAJOR})
 
-find_package(ECM 0.0.14 REQUIRED NO_MODULE)
+set(QT_MIN_VERSION "5.15.2")
+set(KF5_MIN_VERSION "5.96.0")
+set(KDE_COMPILERSETTINGS_LEVEL "5.84")
+
+find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH
     ${ECM_MODULE_PATH}
     ${ECM_KDE_MODULE_DIR}
@@ -18,21 +22,30 @@ include(ECMPackageConfigHelpers)
 include(ECMPoQmTools)
 include(ECMSetupVersion)
 include(FeatureSummary)
+include(GenerateExportHeader)
 include(KDEInstallDirs)
 include(KDECMakeSettings NO_POLICY_SCOPE)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMGeneratePriFile) # This needs InstallDirs
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+    set(QT_REQUIRED_VERSION "6.4.0")
+    set(QT_MIN_VERSION "${QT_REQUIRED_VERSION}")
+    set(KF_MIN_VERSION "5.240.0")
+    set(KF_MAJOR_VERSION "6")
+else()
+    set(KF_MAJOR_VERSION "5")
+endif()
+
 # Turn exceptions on
 kde_enable_exceptions()
 
-set(REQUIRED_QT_VERSION 5.8.0) # Used in QAptConfig
-find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED DBus Widgets)
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets)
 
 find_package(Xapian REQUIRED)
 find_package(AptPkg REQUIRED)
 
-find_package(PolkitQt5-1 0.112 REQUIRED)
+find_package(PolkitQt${QT_MAJOR_VERSION}-1 0.112 REQUIRED)
 
 # Find the required Libaries
 include_directories(
@@ -61,20 +74,9 @@ add_definitions(-DQAPT_WORKER_RDN_VERSIONED_STRING=${QAPT_WORKER_RDN_VERSIONED_S
 # Also forward version for utils.
 add_definitions(-DCMAKE_PROJECT_VERSION=\"${PROJECT_VERSION}\")
 
-set(KF5_DEP_VERSION "5.0.0")
-
-# Only used to install worker actions
-find_package(KF5Auth ${KF5_DEP_VERSION})
-
-# Used for utils
-find_package(KF5CoreAddons ${KF5_DEP_VERSION})
-find_package(KF5I18n ${KF5_DEP_VERSION})
-find_package(KF5KIO ${KF5_DEP_VERSION})
-find_package(KF5Runner ${KF5_DEP_VERSION})
-find_package(KF5TextWidgets ${KF5_DEP_VERSION})
-find_package(KF5WidgetsAddons ${KF5_DEP_VERSION})
-find_package(KF5WindowSystem ${KF5_DEP_VERSION})
-find_package(KF5IconThemes ${KF5_DEP_VERSION})
+find_package(KF${KF_MAJOR_VERSION} ${KF5_MIN_VERSION} COMPONENTS Auth # Only used to install worker actions
+    # Used for utils
+    CoreAddons I18n KIO IconThemes TextWidgets Runner WidgetsAddons WindowSystem)
 
 find_package(DebconfKDE 1.0)
 find_package(GStreamer 1.0)

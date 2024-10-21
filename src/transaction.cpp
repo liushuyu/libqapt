@@ -717,3 +717,5 @@ void Transaction::emitFinished(int exitStatus)
 }
 
 }
+
+#include "moc_transaction.cpp"

@@ -26,6 +26,8 @@
 #include <QString>
 #include <QSharedDataPointer>
 
+#include "qapt_export.h"
+
 namespace QApt {
 
 class ChangelogEntryPrivate;
@@ -38,7 +40,7 @@ class ChangelogPrivate;
  * @since 1.3
  */
 
-class Q_DECL_EXPORT ChangelogEntry
+class QAPT_EXPORT ChangelogEntry
 {
 public:
     /**
@@ -95,7 +97,7 @@ typedef QList<ChangelogEntry> ChangelogEntryList;
  * @author Jonathan Thomas
  * @since 1.3
  */
-class Q_DECL_EXPORT Changelog
+class QAPT_EXPORT Changelog
 {
 public:
     /**

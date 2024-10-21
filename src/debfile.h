@@ -39,7 +39,7 @@ class DebFilePrivate;
  * @author Jonathan Thomas
  * @since 1.2
  */
-class Q_DECL_EXPORT DebFile
+class QAPT_EXPORT DebFile
 {
 
 public:

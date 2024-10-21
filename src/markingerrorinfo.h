@@ -30,7 +30,7 @@ namespace QApt {
 
 class MarkingErrorInfoPrivate;
 
-class Q_DECL_EXPORT MarkingErrorInfo
+class QAPT_EXPORT MarkingErrorInfo
 {
 public:
     /**

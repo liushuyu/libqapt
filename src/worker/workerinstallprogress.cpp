@@ -23,7 +23,11 @@
 
 #include <QStringBuilder>
 #include <QStringList>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 3, 0))
+#include <QLocale>
+#else
 #include <QTextCodec>
+#endif
 #include <QDebug>
 
 #include <apt-pkg/error.h>
@@ -70,10 +74,15 @@ void WorkerInstallProgress::setTransaction(Transaction *trans)
     //        Ultimately transactions should get new properties for QLocale::name
     //        and QTextCodec::name, assuming generally meaningful values we can
     //        through those properties accurately recreate the client locale env.
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 3, 0))
+        QLocale locale = QLocale(m_trans->locale());
+        QLocale::setDefault(locale);
+#else
     if (m_trans->locale().contains(QChar('.'))) {
         QTextCodec *codec = QTextCodec::codecForName(m_trans->locale().split(QChar('.')).last().toUtf8());
         QTextCodec::setCodecForLocale(codec);
     }
+#endif
 
     if ((trans->frontendCaps() & QApt::DebconfCap) && !trans->debconfPipe().isEmpty()) {
         setenv("DEBIAN_FRONTEND", "passthrough", 1);

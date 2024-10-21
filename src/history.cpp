@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QSharedData>
 #include <QStringBuilder>
 
@@ -126,7 +127,7 @@ void HistoryItemPrivate::parseData(const QString &data)
 
             QString actionPackages = keyValue.value(1);
             // Remove arch info
-            actionPackages.remove(QRegExp(QLatin1String(":\\w+")));
+            actionPackages.remove(QRegularExpression(QLatin1String(":\\w+")));
 
             for (QString package : actionPackages.split(QLatin1String("), "))) {
                 if (!package.endsWith(QLatin1Char(')'))) {

@@ -46,7 +46,7 @@ class HistoryItemPrivate;
  * @author Jonathan Thomas
  * @since 1.1
  */
-class Q_DECL_EXPORT HistoryItem
+class QAPT_EXPORT HistoryItem
 {
 public:
    /**
@@ -150,7 +150,7 @@ class HistoryPrivate;
  * @author Jonathan Thomas
  * @since 1.1
  */
-class Q_DECL_EXPORT History : public QObject
+class QAPT_EXPORT History : public QObject
 {
     Q_OBJECT
 public:

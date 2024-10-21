@@ -28,14 +28,14 @@ set(qapt_worker_SRCS
     workerdaemon.cpp
     workerinstallprogress.cpp)
 
-qt5_add_dbus_adaptor(qapt_worker_adaptor_SRCS
+qt_add_dbus_adaptor(qapt_worker_adaptor_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/${QAPT_WORKER_RDN_VERSIONED}.transaction.xml
     transaction.h
     Transaction
     transactionadaptor
     TransactionAdaptor)
 
-qt5_add_dbus_adaptor(qapt_worker_SRCS
+qt_add_dbus_adaptor(qapt_worker_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/${QAPT_WORKER_RDN_VERSIONED}.xml
     workerdaemon.h
     WorkerDaemon
@@ -47,16 +47,16 @@ add_executable(qaptworker${QAPT_WORKER_VERSION}
     ${qapt_worker_adaptor_SRCS})
 
 target_link_libraries(qaptworker${QAPT_WORKER_VERSION}
-    Qt5::Core
-    Qt5::DBus
-    PolkitQt5-1::Core
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::DBus
+    PolkitQt${QT_MAJOR_VERSION}-1::Core
     util
     QApt::Main)
 
 install(TARGETS qaptworker${QAPT_WORKER_VERSION} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${QAPT_WORKER_RDN_VERSIONED}.service
-        DESTINATION ${DBUS_SYSTEM_SERVICES_INSTALL_DIR})
+        DESTINATION ${KDE_INSTALL_DBUSSYSTEMSERVICEDIR})
 
 if(KF5Auth_FOUND)
     kauth_install_actions(${QAPT_WORKER_RDN_VERSIONED} ${CMAKE_CURRENT_BINARY_DIR}/${QAPT_WORKER_RDN_VERSIONED}.actions)

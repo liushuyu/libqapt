@@ -39,7 +39,7 @@ class DownloadProgressPrivate;
  * @author Jonathan Thomas
  * @since 2.0
  */
-class Q_DECL_EXPORT DownloadProgress
+class QAPT_EXPORT DownloadProgress
 {
 public:
     DownloadProgress();

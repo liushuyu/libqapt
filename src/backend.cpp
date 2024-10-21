@@ -152,7 +152,7 @@ QDateTime BackendPrivate::getReleaseDateFromDistroInfo(const QString &releaseId,
             split = line.split(QLatin1Char(','));
             if (split.value(codenameColumn) == releaseCodename) {
                 releaseDate = QDateTime::fromString(split.value(releaseColumn), Qt::ISODate);
-                releaseDate.setTimeSpec(Qt::UTC);;
+                releaseDate.setTimeZone(QTimeZone::utc());;
                 break;
             }
         } while (!line.isNull());
@@ -804,7 +804,7 @@ bool Backend::xapianIndexNeedsUpdate() const
     // If the cache has been modified after the xapian timestamp, we need to rebuild
     QDateTime aptCacheTime = QFileInfo(d->config->findFile("Dir::Cache::pkgcache")).lastModified();
 
-    return ((d->xapianTimeStamp < aptCacheTime.toTime_t()) || (!d->xapianIndexExists));
+    return ((d->xapianTimeStamp < aptCacheTime.toSecsSinceEpoch()) || (!d->xapianIndexExists));
 }
 
 bool Backend::openXapianIndex()
@@ -812,7 +812,7 @@ bool Backend::openXapianIndex()
     Q_D(Backend);
 
     QFileInfo timeStamp(QLatin1String("/var/lib/apt-xapian-index/update-timestamp"));
-    d->xapianTimeStamp = timeStamp.lastModified().toTime_t();
+    d->xapianTimeStamp = timeStamp.lastModified().toSecsSinceEpoch();
 
     if(d->xapianDatabase) {
         delete d->xapianDatabase;

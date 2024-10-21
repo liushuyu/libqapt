@@ -11,7 +11,8 @@ set(qapt_SRCS
     downloadprogress.cpp
     markingerrorinfo.cpp
     sourceentry.cpp
-    sourceslist.cpp)
+    sourceslist.cpp
+    sourceslist.h)
 
 add_subdirectory(worker)
 
@@ -25,7 +26,7 @@ set_property(SOURCE ${CMAKE_CURRENT_BINARY_DIR}/worker/${QAPT_WORKER_RDN_VERSION
 )
 
 message(WARNING "terrible use of transaction xml file")
-qt5_add_dbus_interface(qapt_SRCS
+qt_add_dbus_interface(qapt_SRCS
                        ${CMAKE_CURRENT_BINARY_DIR}/worker/${QAPT_WORKER_RDN_VERSIONED}.transaction.xml
                        transactioninterface_p)
 
@@ -35,7 +36,7 @@ set_property(SOURCE ${CMAKE_CURRENT_BINARY_DIR}/worker/${QAPT_WORKER_RDN_VERSION
 )
 
 message(WARNING "terrible use of  worker xml file")
-qt5_add_dbus_interface(qapt_SRCS
+qt_add_dbus_interface(qapt_SRCS
                        ${CMAKE_CURRENT_BINARY_DIR}/worker/${QAPT_WORKER_RDN_VERSIONED}.xml
                        workerinterface_p)
 
@@ -45,6 +46,7 @@ ecm_create_qm_loader(qapt_SRCS libqapt)
 
 add_library(QApt SHARED ${qapt_SRCS})
 add_library(QApt::Main ALIAS QApt)
+generate_export_header(QApt BASE_NAME QApt)
 
 # Set header paths for target so the utils can find them.
 target_include_directories(QApt PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_BINARY_DIR}/..>")
@@ -52,16 +54,16 @@ target_include_directories(QApt INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL
 
 set_target_properties(QApt
     PROPERTIES
-    VERSION ${QAPT_VERSION_STRING}
+    VERSION ${PROJECT_VERSION}
     SOVERSION ${QAPT_SOVERSION}
     EXPORT_NAME Main)
 
 target_link_libraries(QApt
     PUBLIC
-        Qt5::Widgets
+        Qt${QT_MAJOR_VERSION}::Widgets
         ${APTPKG_LIBRARIES}
     PRIVATE
-        Qt5::DBus
+        Qt${QT_MAJOR_VERSION}::DBus
         ${XAPIAN_LIBRARIES})
 
 install(TARGETS QApt EXPORT QAptTargets LIBRARY DESTINATION ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})

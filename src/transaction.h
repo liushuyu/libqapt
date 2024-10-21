@@ -51,7 +51,7 @@ class TransactionPrivate;
  * @author Jonathan Thomas
  * @since 2.0
  */
-class Q_DECL_EXPORT Transaction : public QObject
+class QAPT_EXPORT Transaction : public QObject
 {
     Q_OBJECT
 

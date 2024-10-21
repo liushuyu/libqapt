@@ -58,7 +58,7 @@ Transaction::Transaction(TransactionQueue *queue, int userId,
     , m_safeUpgrade(true)
     , m_replaceConfFile(false)
     , m_frontendCaps(QApt::NoCaps)
-    , m_dataMutex(QMutex::Recursive)
+    , m_dataMutex()
 {
     new TransactionAdaptor(this);
     QDBusConnection connection = QDBusConnection::systemBus();
