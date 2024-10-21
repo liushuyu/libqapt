@@ -35,15 +35,15 @@ class WorkerAcquire : public QObject, public pkgAcquireStatus
 public:
     explicit WorkerAcquire(QObject *parent, int begin = 0, int end = 100);
 
-    void Start();
-    void IMSHit(pkgAcquire::ItemDesc &Itm);
-    void Fetch(pkgAcquire::ItemDesc &Itm);
-    void Done(pkgAcquire::ItemDesc &Itm);
-    void Fail(pkgAcquire::ItemDesc &Itm);
-    void Stop();
-    bool MediaChange(std::string Media, std::string Drive);
+    void Start() override;
+    void IMSHit(pkgAcquire::ItemDesc &Itm) override;
+    void Fetch(pkgAcquire::ItemDesc &Itm) override;
+    void Done(pkgAcquire::ItemDesc &Itm) override;
+    void Fail(pkgAcquire::ItemDesc &Itm) override;
+    void Stop() override;
+    bool MediaChange(std::string Media, std::string Drive) override;
 
-    bool Pulse(pkgAcquire *Owner);
+    bool Pulse(pkgAcquire *Owner) override;
 
     void setTransaction(Transaction *trans);
 

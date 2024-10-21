@@ -183,7 +183,7 @@ void Config::writeEntry(const QString &key, const bool value)
     boolString = value ? "\"true\";" : "\"false\";";
 
     if (d->newFile) {
-        d->buffer.append(key + ' ' + boolString);
+        d->buffer.append(key.toUtf8() + ' ' + boolString);
         d->newFile = false;
     } else {
         d->writeBufferEntry(key.toLatin1(), boolString);

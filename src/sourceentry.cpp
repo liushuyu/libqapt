@@ -161,7 +161,7 @@ void SourceEntryPrivate::parseData(const QString &data)
         return;
     }
 
-    QStringList pieces = tData.mid(start).split(' ', QString::SkipEmptyParts);
+    QStringList pieces = tData.mid(start).split(' ', Qt::SkipEmptyParts);
     if (pieces.isEmpty()) {
         // Invalid source entry
         isValid = false;

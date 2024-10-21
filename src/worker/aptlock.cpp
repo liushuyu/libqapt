@@ -20,6 +20,7 @@
 
 #include "aptlock.h"
 
+#include <unistd.h>
 #include <apt-pkg/error.h>
 #include <QDebug>
 

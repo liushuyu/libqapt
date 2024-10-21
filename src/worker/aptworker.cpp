@@ -47,6 +47,7 @@
 // System includes
 #include <sys/statvfs.h>
 #include <sys/statfs.h>
+#include <unistd.h>
 #define RAMFS_MAGIC     0x858458f6
 
 // Own includes
@@ -80,7 +81,7 @@ public:
         m_end = m_steps.takeFirst();
     }
 
-    void Update() {
+    void Update() override {
         int progress;
         if (Percent < 101) {
             progress = qRound(m_begin + qreal(Percent / 100.0) * (m_end - m_begin));
@@ -95,7 +96,7 @@ public:
             m_trans->setProgress(progress);
     }
 
-    void Done() {
+    void Done() override {
         // Make sure the progress is set correctly
         m_lastProgress = m_end;
         // Update beginning progress for the next "step"
@@ -399,6 +400,7 @@ bool AptWorker::markChanges()
         }
         case QApt::Package::ToPurge:
             toPurge = true;
+            __attribute__ ((fallthrough));
         case QApt::Package::ToRemove:
             (*m_cache)->SetReInstall(iter, false);
             (*m_cache)->MarkDelete(iter, toPurge);
@@ -656,12 +658,10 @@ void AptWorker::installFile()
     }
 
     m_dpkgProcess = new QProcess(this);
-    QString program = QLatin1String("dpkg") %
-            QLatin1String(" -i ") % '"' % m_trans->filePath() % '"';
     setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", 1);
     setenv("DEBIAN_FRONTEND", "passthrough", 1);
     setenv("DEBCONF_PIPE", "/tmp/qapt-sock", 1);
-    m_dpkgProcess->start(program);
+    m_dpkgProcess->start("dpkg", {"-i", m_trans->filePath()});
     connect(m_dpkgProcess, SIGNAL(started()), this, SLOT(dpkgStarted()));
     connect(m_dpkgProcess, SIGNAL(readyRead()), this, SLOT(updateDpkgProgress()));
     connect(m_dpkgProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
