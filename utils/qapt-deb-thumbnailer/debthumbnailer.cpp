@@ -19,36 +19,25 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "DebThumbnailer.h"
+#include "debthumbnailer.h"
 
 #include <QDir>
 #include <QStringBuilder>
 #include <QImage>
 #include <QPainter>
+#include <QTemporaryDir>
 
 #include <QIcon>
 #include <QDebug>
 
 #include <QApt/DebFile>
-
-extern "C"
-{
-    Q_DECL_EXPORT ThumbCreator *new_creator()
-    {
-        return new DebThumbnailer;
-    }
-}
-
-
-DebThumbnailer::DebThumbnailer()
-{
-}
+#include <KPluginFactory>
 
 DebThumbnailer::~DebThumbnailer()
 {
 }
 
-bool DebThumbnailer::create(const QString &path, int width, int height, QImage &img)
+static bool generateThumbnail(const QString &path, const int width, const int height, QImage &img)
 {
     const QApt::DebFile debFile(path);
 
@@ -72,7 +61,7 @@ bool DebThumbnailer::create(const QString &path, int width, int height, QImage &
         }
     }
 
-    qSort(iconsList);
+    iconsList.sort();
 
     if (iconsList.isEmpty()) {
         return false;
@@ -80,11 +69,10 @@ bool DebThumbnailer::create(const QString &path, int width, int height, QImage &
 
     QString iconPath = iconsList.last();
 
-    // FIXME: two users at the same time cannot use the thumbnailer or bad things happen
-    QDir tempDir = QDir::temp();
-    tempDir.mkdir(QStringLiteral("kde-deb-thumbnailer"));
+    QTemporaryDir tempDir = QTemporaryDir();
+    tempDir.setAutoRemove(true);
 
-    QString destPath = QDir::tempPath() % QLatin1Literal("/kde-deb-thumbnailer/");
+    QString destPath = tempDir.path();
 
     if (!debFile.extractFileFromArchive(iconPath, destPath)) {
         return false;
@@ -103,7 +91,28 @@ bool DebThumbnailer::create(const QString &path, int width, int height, QImage &
     return true;
 }
 
-ThumbCreator::Flags DebThumbnailer::flags() const
-{
-    return None;
+#if KIO_VERSION_MAJOR >= 6
+KIO::ThumbnailResult DebThumbnailer::create(const KIO::ThumbnailRequest &request) {
+    const auto url = request.url();
+    const QString path = url.toLocalFile();
+    const QSize targetSize = request.targetSize();
+    const int width = targetSize.width();
+    const int height = targetSize.height();
+    QImage img{};
+
+    if (generateThumbnail(path, width, height, img)) {
+        return KIO::ThumbnailResult::pass(img);
+    } else {
+        return KIO::ThumbnailResult::fail();
+    }
 }
+#else
+bool DebThumbnailer::create(const QString &path, int width, int height, QImage &img) {
+    return generateThumbnail(path, width, height, img);
+}
+#endif
+
+K_PLUGIN_CLASS_WITH_JSON(DebThumbnailer, "debthumbnailer.json")
+
+#include "debthumbnailer.moc"
+#include "moc_debthumbnailer.cpp"

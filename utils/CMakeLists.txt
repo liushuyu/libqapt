@@ -4,7 +4,5 @@ add_subdirectory(qapt-deb-thumbnailer)
 add_subdirectory(plasma-runner-installer)
 
 if(WITH_GSTREAMER)
-    add_definitions(-fexceptions)
-    add_definitions(-DGST_DISABLE_DEPRECATED)
     add_subdirectory(qapt-gst-helper)
 endif()

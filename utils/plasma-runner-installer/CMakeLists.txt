@@ -1,11 +1,7 @@
+kcoreaddons_add_plugin(krunner_installer SOURCES installerrunner.cpp INSTALL_NAMESPACE "kf${KF_MAJOR_VERSION}/krunner")
 # KI18N Translation Domain for this library
-add_definitions(-DTRANSLATION_DOMAIN=\"plasma-runner-installer\")
-
-add_library(krunner_installer MODULE installerrunner.cpp)
+target_compile_definitions(krunner_installer PRIVATE -DTRANSLATION_DOMAIN=\"plasma-runner-installer\")
 
 target_link_libraries(krunner_installer
-    KF5::I18n
-    KF5::Runner)
-
-install(TARGETS krunner_installer DESTINATION ${PLUGIN_INSTALL_DIR} )
-install(FILES plasma-runner-installer.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+    KF${KF_MAJOR_VERSION}::I18n
+    KF${KF_MAJOR_VERSION}::Runner)

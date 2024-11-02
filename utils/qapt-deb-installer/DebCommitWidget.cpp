@@ -41,7 +41,7 @@ DebCommitWidget::DebCommitWidget(QWidget *parent)
     : QWidget(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 
     m_headerLabel = new QLabel(this);

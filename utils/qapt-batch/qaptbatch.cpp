@@ -76,7 +76,7 @@ QAptBatch::QAptBatch(QString mode, QStringList packages, int winId)
     setTransaction(m_trans);
 
     if (winId)
-        KWindowSystem::setMainWindow(this, winId);
+        KWindowSystem::setMainWindow(this->windowHandle(), winId);
 
     // Create buttons.
     m_buttonBox->setStandardButtons(QDialogButtonBox::Cancel | QDialogButtonBox::Close);

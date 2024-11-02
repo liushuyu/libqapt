@@ -1,10 +1,7 @@
-add_library(debthumbnailer MODULE DebThumbnailer.cpp)
+kcoreaddons_add_plugin(debthumbnailer SOURCES debthumbnailer.cpp INSTALL_NAMESPACE "kf${KF_MAJOR_VERSION}/thumbcreator")
 
 target_link_libraries(debthumbnailer
-    KF5::KIOWidgets
+    KF${KF_MAJOR_VERSION}::KIOWidgets
     QApt::Main)
 
 message(WARNING "make sure thumbnailer actually works")
-
-install(TARGETS debthumbnailer DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES debthumbnailer.desktop DESTINATION ${SERVICES_INSTALL_DIR})

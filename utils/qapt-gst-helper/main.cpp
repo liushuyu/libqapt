@@ -30,9 +30,6 @@
 #include <gst/gst.h>
 #include <gst/pbutils/install-plugins.h>
 
-static const char description[] =
-    I18N_NOOP2("@info", "A GStreamer codec installer using QApt");
-
 static const char version[] = CMAKE_PROJECT_VERSION;
 
 int main(int argc, char **argv)
@@ -45,7 +42,7 @@ int main(int argc, char **argv)
     KAboutData aboutData("qapt-gst-helper",
                          i18nc("@title", "QApt Codec Searcher"),
                          version,
-                         i18nc("@info", description),
+                         i18nc("@info", "A GStreamer codec installer using QApt"),
                          KAboutLicense::LicenseKey::GPL,
                          i18nc("@info:credit", "(C) 2011 Jonathan Thomas"));
 

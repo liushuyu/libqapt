@@ -72,7 +72,7 @@ PluginHelper::PluginHelper(QWidget *parent, const QStringList &gstDetails, int w
     }
 
     if (m_winId) {
-        KWindowSystem::setMainWindow(this, m_winId);
+        KWindowSystem::setMainWindow(this->windowHandle(), m_winId);
     }
 
     QPushButton *button = new QPushButton(this);
@@ -178,7 +178,7 @@ void PluginHelper::canSearch()
         break;
     }
 
-    QString msg = QLatin1Literal("<h3>") % title % QLatin1Literal("</h3>") % message;
+    QString msg = QStringLiteral("<h3>") % title % QStringLiteral("</h3>") % message;
     KGuiItem searchButton = KStandardGuiItem::yes();
     searchButton.setText(i18nc("Search for packages" ,"Search"));
     searchButton.setIcon(QIcon::fromTheme("edit-find"));

@@ -29,9 +29,6 @@
 #include <KAboutData>
 #include <KLocalizedString>
 
-static const char description[] =
-    I18N_NOOP2("@info", "A batch installer using QApt");
-
 static const char version[] = CMAKE_PROJECT_VERSION;
 
 int main(int argc, char **argv)
@@ -44,7 +41,7 @@ int main(int argc, char **argv)
     KAboutData aboutData("qaptbatch",
                          i18nc("@title", "QApt Batch Installer"),
                          version,
-                         i18nc("@info", description),
+                         i18nc("@info", "A batch installer using QApt"),
                          KAboutLicense::LicenseKey::GPL,
                          i18nc("@info:credit", "(C) 2010 Jonathan Thomas"));
 

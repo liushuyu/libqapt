@@ -54,7 +54,7 @@ ChangesDialog::ChangesDialog(QWidget *parent, const QApt::StateChanges &changes)
     QWidget *bottomBox = new QWidget(this);
     QHBoxLayout *bottomLayout = new QHBoxLayout(bottomBox);
     bottomLayout->setSpacing(0);
-    bottomLayout->setMargin(0);
+    bottomLayout->setContentsMargins(0, 0, 0, 0);
     bottomBox->setLayout(bottomLayout);
 
     QWidget *bottomSpacer = new QWidget(bottomBox);

@@ -23,7 +23,13 @@
 
 #include <QStringList>
 
+#include <kio_version.h>
+#if KIO_VERSION_MAJOR >= 6
+#include <kio/thumbnailcreator.h>
+using ThumbCreator = KIO::ThumbnailCreator;
+#else
 #include <kio/thumbcreator.h>
+#endif
 
 namespace QApt {
     class DebFile;
@@ -31,12 +37,20 @@ namespace QApt {
 
 class DebThumbnailer : public ThumbCreator
 {
+    Q_OBJECT
 public:
-    DebThumbnailer();
-    virtual ~DebThumbnailer();
+    virtual ~DebThumbnailer() override;
 
+#if KIO_VERSION_MAJOR >= 6
+    DebThumbnailer(QObject *parent, const QVariantList &args) : ThumbCreator(parent, args) {}
+    virtual KIO::ThumbnailResult create(const KIO::ThumbnailRequest &request) override;
+#else
+    DebThumbnailer() = default;
     virtual bool create(const QString &path, int w, int h, QImage &img);
-    virtual Flags flags() const;
+    virtual Flags flags() const override {
+        return None;
+    }
+#endif
 };
 
 #endif
